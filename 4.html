@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Решение - QaryzSheshim</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL,GRAD,opsz@400,1,0,24" rel="stylesheet" />
+
+<style>
+:root {
+  --primary: #10B981;
+  --primary-dark: #059669;
+  --primary-light: #D1FAE5;
+  --secondary: #6366F1;
+  --slate-50: #F8FAFC;
+  --slate-100: #F1F5F9;
+  --slate-200: #E2E8F0;
+  --slate-400: #94A3B8;
+  --slate-600: #475569;
+  --slate-900: #0F172A;
+  --glass: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --shadow-premium: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--slate-50);
+  color: var(--slate-900);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+  padding: 40px 24px;
+}
+
+/* Background Mesh */
+.bg-mesh {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: 
+    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(245, 158, 11, 0.05) 0px, transparent 50%);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.reveal {
+  animation: fadeInUp 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.decision-container {
+  max-width: 600px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.header-section {
+  text-align: center;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  padding: 8px 16px;
+  border-radius: 99px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+.badge span {
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 10px var(--primary);
+}
+
+h1 {
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+.header-subtitle {
+  font-size: 18px;
+  color: var(--slate-600);
+}
+
+/* Main Card */
+.main-card {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 32px;
+  padding: 40px;
+  box-shadow: var(--shadow-premium);
+  width: 100%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.main-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+.card-amount-group {
+  margin-bottom: 24px;
+}
+
+.amount-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--slate-400);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.amount-old {
+  font-size: 24px;
+  text-decoration: line-through;
+  color: var(--slate-400);
+  font-weight: 600;
+}
+
+.amount-new {
+  font-size: 56px;
+  font-weight: 800;
+  color: var(--slate-900);
+  line-height: 1;
+  margin: 16px 0 8px;
+  background: linear-gradient(135deg, var(--slate-900), var(--slate-600));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.amount-new-label {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--slate-600);
+}
+
+.divider {
+  height: 1px;
+  background: var(--slate-200);
+  margin: 24px 0;
+  width: 100%;
+}
+
+.saving-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.saving-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  padding: 12px 24px;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 20px;
+  box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+}
+
+.saving-note {
+  font-size: 14px;
+  color: var(--slate-600);
+  font-weight: 500;
+}
+
+.context-text {
+  font-size: 14px;
+  color: var(--slate-400);
+  margin-top: -16px;
+}
+
+/* Trust Block */
+.trust-block {
+  background: white;
+  border-radius: 24px;
+  padding: 24px;
+  width: 100%;
+  border: 1px solid var(--slate-100);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+}
+
+.trust-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.trust-header .material-symbols-outlined {
+  color: var(--primary);
+  font-size: 24px;
+}
+
+.trust-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--slate-900);
+}
+
+.trust-list {
+  list-style: none;
+  font-size: 15px;
+  color: var(--slate-600);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trust-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.trust-list li::before {
+  content: '✓';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* Actions */
+.actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  padding: 20px 36px;
+  border-radius: 16px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 18px;
+  box-shadow: 0 15px 30px rgba(16, 185, 129, 0.25);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(16, 185, 129, 0.35);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--slate-600);
+  border: none;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-secondary:hover {
+  color: var(--slate-900);
+}
+
+@media (max-width: 640px) {
+  h1 { font-size: 32px; }
+  .amount-new { font-size: 48px; }
+  .main-card { padding: 32px 24px; }
+  .btn-primary { padding: 18px 24px; font-size: 16px; }
+  .trust-list li { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-mesh"></div>
+
+<main class="decision-container">
+  
+  <div class="header-section reveal" style="animation-delay: 0.1s;">
+    <div class="badge"><span></span> Решение готово</div>
+    <h1>Вы можете закрыть долг<br>на <span style="color: var(--primary);">550 000 ₸</span> меньше</h1>
+    <p class="header-subtitle">Это реальный и достижимый сценарий</p>
+  </div>
+
+  <div class="main-card reveal" style="animation-delay: 0.2s;">
+    <div class="card-amount-group">
+      <span class="amount-label">Было</span>
+      <div class="amount-old">1 200 000 ₸</div>
+    </div>
+    
+    <div class="card-amount-group">
+      <div class="amount-new">650 000 ₸</div>
+      <div class="amount-new-label">Ваша финальная сумма</div>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <div class="saving-section">
+      <div class="saving-pill">
+        <span class="material-symbols-outlined" style="font-size: 24px;">trending_down</span>
+        Экономия 550 000 ₸
+      </div>
+      <span class="saving-note">Вы не платите эту сумму</span>
+    </div>
+  </div>
+  
+  <p class="context-text reveal" style="animation-delay: 0.3s;">
+    Расчет выполнен на основе ваших доходов
+  </p>
+
+  <div class="actions reveal" style="animation-delay: 0.5s;">
+    <button class="btn-primary" onclick="window.location.href='1.html'">
+      Закрыть долг по этому плану
+      <span class="material-symbols-outlined">arrow_forward</span>
+    </button>
+    <button class="btn-secondary" onclick="window.location.href='1.html'">
+      Я подумаю и вернусь позже
+    </button>
+  </div>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QaryzSheshim — Ваше финансовое освобождение</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --primary: #10B981;
+  --primary-dark: #059669;
+  --primary-light: #D1FAE5;
+  --secondary: #6366F1;
+  --slate-50: #F8FAFC;
+  --slate-100: #F1F5F9;
+  --slate-200: #E2E8F0;
+  --slate-400: #94A3B8;
+  --slate-600: #475569;
+  --slate-900: #0F172A;
+  --glass: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --shadow-premium: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--slate-50);
+  color: var(--slate-900);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.reveal {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Background Mesh */
+.bg-mesh {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: 
+    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(245, 158, 11, 0.05) 0px, transparent 50%);
+}
+
+/* Header */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 20px 0;
+  transition: var(--transition);
+}
+
+header.scrolled {
+  padding: 12px 0;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-premium);
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--slate-600);
+  font-weight: 500;
+  font-size: 15px;
+  transition: var(--transition);
+}
+
+.nav-links a:hover {
+  color: var(--primary);
+}
+
+.btn-nav {
+  background: var(--slate-900);
+  color: white !important;
+  padding: 10px 24px;
+  border-radius: 99px;
+  font-weight: 600;
+}
+
+/* Hero Section */
+.hero {
+  padding: 180px 0 100px;
+  position: relative;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  padding: 8px 16px;
+  border-radius: 99px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.badge span {
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 10px var(--primary);
+}
+
+h1 {
+  font-size: 64px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  letter-spacing: -1.5px;
+}
+
+h1 span.accent {
+  display: block;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+  font-size: 18px;
+  color: var(--slate-600);
+  max-width: 540px;
+  margin-bottom: 40px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  padding: 18px 36px;
+  border-radius: 16px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 16px;
+  box-shadow: 0 15px 30px rgba(16, 185, 129, 0.25);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(16, 185, 129, 0.35);
+}
+
+.hero-stats {
+  margin-top: 60px;
+  display: flex;
+  gap: 40px;
+}
+
+.stat-item h3 {
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.stat-item p {
+  font-size: 14px;
+  color: var(--slate-400);
+}
+
+/* Card Visual */
+.hero-visual {
+  position: relative;
+  animation: float 6s ease-in-out infinite;
+}
+
+.main-card {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 32px;
+  padding: 40px;
+  box-shadow: var(--shadow-premium);
+  position: relative;
+  z-index: 2;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.amount-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--slate-400);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.amount-old {
+  font-size: 24px;
+  text-decoration: line-through;
+  color: var(--slate-400);
+  font-weight: 600;
+}
+
+.amount-new {
+  font-size: 64px;
+  font-weight: 800;
+  color: var(--slate-900);
+  line-height: 1;
+  margin: 10px 0;
+}
+
+.saving-pill {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+}
+
+.card-image {
+  position: absolute;
+  top: -60px;
+  right: -40px;
+  width: 200px;
+  height: 200px;
+  z-index: 3;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Features */
+.features {
+  padding: 120px 0;
+  background: white;
+}
+
+.section-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 80px;
+}
+
+.section-header h2 {
+  font-size: 44px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 20px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.feature-card {
+  padding: 40px;
+  border-radius: 24px;
+  background: var(--slate-50);
+  border: 1px solid var(--slate-100);
+  transition: var(--transition);
+}
+
+.feature-card:hover {
+  background: white;
+  border-color: var(--primary-light);
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-premium);
+}
+
+.feature-icon {
+  width: 64px;
+  height: 64px;
+  background: white;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  font-size: 28px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+/* Process */
+.process {
+  padding: 120px 0;
+  background: var(--slate-900);
+  color: white;
+  overflow: hidden;
+}
+
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  position: relative;
+}
+
+.process-item {
+  position: relative;
+  z-index: 2;
+}
+
+.process-num {
+  font-size: 80px;
+  font-weight: 900;
+  opacity: 0.1;
+  position: absolute;
+  top: -40px;
+  left: -20px;
+}
+
+.process-item h3 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.process-item p {
+  color: var(--slate-400);
+}
+
+/* CTA Section */
+.cta-section {
+  padding: 120px 0;
+}
+
+.cta-box {
+  background: linear-gradient(135deg, var(--slate-900), #1e293b);
+  border-radius: 40px;
+  padding: 80px;
+  text-align: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-box::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.cta-box h2 {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 24px;
+}
+
+.cta-box p {
+  font-size: 20px;
+  color: var(--slate-400);
+  margin-bottom: 40px;
+}
+
+/* Footer */
+footer {
+  padding: 60px 0;
+  border-top: 1px solid var(--slate-200);
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.social-links {
+  display: flex;
+  gap: 20px;
+}
+
+@media (max-width: 968px) {
+  .hero-grid { grid-template-columns: 1fr; text-align: center; }
+  .hero-subtitle { margin-left: auto; margin-right: auto; }
+  .hero-actions { justify-content: center; }
+  .hero-stats { justify-content: center; }
+  h1 { font-size: 48px; }
+  .feature-grid, .process-grid { grid-template-columns: 1fr; }
+  .card-image { display: none; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="bg-mesh"></div>
+
+<header id="header">
+  <div class="nav-container">
+    <div class="logo">QaryzSheshim</div>
+    <nav class="nav-links">
+      <a href="#features">Преимущества</a>
+      <a href="#process">Как это работает</a>
+      <a href="#results">Результаты</a>
+      <a href="#" class="btn-nav">Вход</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content reveal">
+          <div class="badge"><span></span> Решение за 2 минуты</div>
+          <h1>
+            Снизьте долг <br>
+            <span class="accent">и закройте его навсегда</span>
+          </h1>
+          <p class="hero-subtitle">
+            Вы получите индивидуальное решение по снижению долговой нагрузки. Точная сумма и график закрытия станут известны сразу после расчета.
+          </p>
+          <div class="hero-actions">
+            <a href="2.html" class="btn-primary">
+              Получить решение 
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.16669 10H15.8334M15.8334 10L10 4.16669M15.8334 10L10 15.8334" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <h3>12 000+</h3>
+              <p>Довольных клиентов</p>
+            </div>
+            <div class="stat-item">
+              <h3>-45%</h3>
+              <p>Среднее снижение</p>
+            </div>
+            <div class="stat-item">
+              <h3>24/7</h3>
+              <p>Поддержка</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal" style="animation-delay: 0.2s;">
+          <div class="card-image">
+            <img src="fintech_hero_3d_illustration_1777297154103.png" alt="Fintech Illustration">
+          </div>
+          <div class="main-card">
+            <div class="card-header">
+              <div class="amount-label">Текущий долг</div>
+              <div class="amount-old">1 200 000 ₸</div>
+            </div>
+            <div class="amount-label">Новая сумма</div>
+            <div class="amount-new">650 000 ₸</div>
+            <div class="saving-pill">Экономия 550 000 ₸</div>
+            
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--slate-200); display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 13px; color: var(--slate-400);">Гарантия результата</span>
+              <div style="display: flex; gap: 4px;">
+                <div style="width: 24px; height: 14px; background: #e2e8f0; border-radius: 4px;"></div>
+                <div style="width: 24px; height: 14px; background: #e2e8f0; border-radius: 4px;"></div>
+                <div style="width: 24px; height: 14px; background: var(--primary); border-radius: 4px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" class="features">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>Почему выбирают нас</h2>
+        <p style="color: var(--slate-600);">Мы помогаем выбраться из долговой ямы, когда кажется, что выхода нет. Прозрачные условия и юридическая защита.</p>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card reveal" style="animation-delay: 0.1s;">
+          <div class="feature-icon">🛡️</div>
+          <h3>Юридическая защита</h3>
+          <p>Останавливаем звонки коллекторов и фиксируем сумму долга законодательно.</p>
+        </div>
+        <div class="feature-card reveal" style="animation-delay: 0.2s;">
+          <div class="feature-icon">📉</div>
+          <h3>Максимальное снижение</h3>
+          <p>Добиваемся списания до 50% от суммы задолженности через переговоры с банками.</p>
+        </div>
+        <div class="feature-card reveal" style="animation-delay: 0.3s;">
+          <div class="feature-icon">⚡</div>
+          <h3>Быстрый старт</h3>
+          <p>Первый результат и остановка начисления процентов уже через 24 часа.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process" class="process">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 style="color: white;">Как это работает</h2>
+        <p style="color: var(--slate-400);">Всего 3 простых шага до вашей финансовой свободы</p>
+      </div>
+      <div class="process-grid">
+        <div class="process-item reveal" style="animation-delay: 0.1s;">
+          <div class="process-num">01</div>
+          <h3>Заявка и анализ</h3>
+          <p>Оставляете заявку, наш алгоритм анализирует вашу ситуацию и предлагает варианты снижения.</p>
+        </div>
+        <div class="process-item reveal" style="animation-delay: 0.2s;">
+          <div class="process-num">02</div>
+          <h3>Заключение договора</h3>
+          <p>Подписываем официальный договор, в котором прописаны все гарантии и финальная сумма.</p>
+        </div>
+        <div class="process-item reveal" style="animation-delay: 0.3s;">
+          <div class="process-num">03</div>
+          <h3>Свобода от долгов</h3>
+          <p>Вы выплачиваете фиксированную сумму по графику и полностью закрываете свои обязательства.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-box reveal">
+        <h2>Готовы начать новую жизнь?</h2>
+        <p>Получите бесплатный расчет и консультацию специалиста прямо сейчас.</p>
+        <div style="display: flex; justify-content: center;">
+          <a href="2.html" class="btn-primary" style="background: white; color: var(--slate-900); box-shadow: 0 10px 20px rgba(255,255,255,0.1);">
+            Сделать расчет бесплатно
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="logo">QaryzSheshim</div>
+      <div style="color: var(--slate-400); font-size: 14px;">
+        © 2026 QaryzSheshim. Все права защищены.
+      </div>
+      <div class="social-links">
+        <!-- Icons could go here -->
+        <span style="font-size: 14px; color: var(--slate-400);">г. Алматы, пр. Аль-Фараби</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Header scroll effect
+  window.addEventListener('scroll', () => {
+    const header = document.getElementById('header');
+    if (window.scrollY > 50) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+
+  // Basic Intersection Observer for animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'all 0.8s ease-out';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
