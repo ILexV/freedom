@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Анализ данных - QaryzSheshim</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --primary: #10B981;
+  --primary-dark: #059669;
+  --primary-light: #D1FAE5;
+  --secondary: #6366F1;
+  --slate-50: #F8FAFC;
+  --slate-100: #F1F5F9;
+  --slate-200: #E2E8F0;
+  --slate-400: #94A3B8;
+  --slate-600: #475569;
+  --slate-900: #0F172A;
+  --glass: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --shadow-premium: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--slate-50);
+  color: var(--slate-900);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Background Mesh */
+.bg-mesh {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: 
+    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(245, 158, 11, 0.05) 0px, transparent 50%);
+}
+
+/* Header */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 16px 0;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.nav-container {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+}
+
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+
+.badge-demo {
+  background: var(--slate-200);
+  color: var(--slate-600);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.close-btn {
+  color: var(--slate-400);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.close-btn:hover {
+  background: var(--slate-200);
+  color: var(--slate-900);
+}
+
+/* Main Layout */
+main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 24px 40px;
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.analysis-container {
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(-10px); }
+}
+
+@keyframes drawCheck {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  80% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
+}
+
+/* Loading Phase */
+.loading-phase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeOut 0.5s ease-in forwards;
+  animation-delay: 5.2s;
+}
+
+.spinner-wrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 32px;
+}
+
+.spinner-bg {
+  position: absolute;
+  inset: 0;
+  border: 4px solid var(--slate-200);
+  border-radius: 50%;
+}
+
+.spinner-anim {
+  position: absolute;
+  inset: 0;
+  border: 4px solid var(--primary);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+
+.spinner-icon svg {
+  width: 32px;
+  height: 32px;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 40px;
+  letter-spacing: -0.5px;
+}
+
+.steps-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.step-item {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  padding: 16px 20px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 15px -5px rgba(0,0,0,0.05);
+  opacity: 0;
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.step-item:nth-child(1) { animation-delay: 0.5s; }
+.step-item:nth-child(2) { animation-delay: 2s; }
+.step-item:nth-child(3) { animation-delay: 3.5s; }
+
+.step-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  opacity: 0;
+  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.step-item:nth-child(1) .step-icon { animation-delay: 0.8s; }
+.step-item:nth-child(2) .step-icon { animation-delay: 2.3s; }
+.step-item:nth-child(3) .step-icon { animation-delay: 3.8s; }
+
+.animated-check {
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: drawCheck 0.5s ease-out forwards;
+}
+
+.step-item:nth-child(1) .animated-check { animation-delay: 1.1s; }
+.step-item:nth-child(2) .animated-check { animation-delay: 2.6s; }
+.step-item:nth-child(3) .animated-check { animation-delay: 4.1s; }
+
+.step-text {
+  font-weight: 600;
+  color: var(--slate-900);
+  font-size: 15px;
+}
+
+/* Success Phase */
+.success-phase {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  padding: 40px;
+  border-radius: 32px;
+  box-shadow: var(--shadow-premium);
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  animation: showSuccess 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 5.5s;
+}
+
+@keyframes showSuccess {
+  from { opacity: 0; transform: translate(-50%, -40%); visibility: visible; }
+  to { opacity: 1; transform: translate(-50%, -50%); visibility: visible; }
+}
+
+.success-icon {
+  width: 72px;
+  height: 72px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  box-shadow: 0 10px 20px rgba(16, 185, 129, 0.15);
+}
+
+.success-icon svg {
+  width: 36px;
+  height: 36px;
+}
+
+.success-title {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+.success-desc {
+  color: var(--slate-600);
+  margin-bottom: 32px;
+  font-size: 15px;
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  padding: 16px 24px;
+  border-radius: 16px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 16px;
+  box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+  transition: var(--transition);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px rgba(16, 185, 129, 0.3);
+}
+
+.btn-cancel {
+  display: inline-block;
+  margin-top: 20px;
+  color: var(--slate-400);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: var(--transition);
+}
+
+.btn-cancel:hover {
+  color: var(--slate-900);
+}
+</style>
+</head>
+<body>
+
+<div class="bg-mesh"></div>
+
+<header>
+  <div class="nav-container">
+    <div class="logo-wrapper">
+      <div class="logo">QaryzSheshim</div>
+      <span class="badge-demo">Demo</span>
+    </div>
+    <a href="step1.html" class="close-btn" aria-label="Закрыть">
+      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M18 6 6 18"></path>
+        <path d="m6 6 12 12"></path>
+      </svg>
+    </a>
+  </div>
+</header>
+
+<main>
+  <div class="analysis-container">
+    
+    <!-- Loading Phase -->
+    <div class="loading-phase">
+      <div class="spinner-wrapper">
+        <div class="spinner-bg"></div>
+        <div class="spinner-anim"></div>
+        <div class="spinner-icon">
+          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+            <rect height="20" rx="2" ry="2" width="16" x="4" y="2"></rect>
+            <path d="M9 22v-4h6v4"></path>
+            <path d="M8 6h.01"></path>
+            <path d="M16 6h.01"></path>
+            <path d="M12 6h.01"></path>
+            <path d="M12 10h.01"></path>
+            <path d="M12 14h.01"></path>
+            <path d="M16 10h.01"></path>
+            <path d="M16 14h.01"></path>
+            <path d="M8 10h.01"></path>
+            <path d="M8 14h.01"></path>
+          </svg>
+        </div>
+      </div>
+      
+      <h1 class="title">Анализ данных</h1>
+      
+      <div class="steps-list">
+        <div class="step-item">
+          <div class="step-icon">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewBox="0 0 24 24">
+              <path class="animated-check" d="M20 6 9 17l-5-5"></path>
+            </svg>
+          </div>
+          <span class="step-text">Анализ структуры задолженности…</span>
+        </div>
+        
+        <div class="step-item">
+          <div class="step-icon">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewBox="0 0 24 24">
+              <path class="animated-check" d="M20 6 9 17l-5-5"></path>
+            </svg>
+          </div>
+          <span class="step-text">Оценка платежеспособности…</span>
+        </div>
+        
+        <div class="step-item">
+          <div class="step-icon">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewBox="0 0 24 24">
+              <path class="animated-check" d="M20 6 9 17l-5-5"></path>
+            </svg>
+          </div>
+          <span class="step-text">Формирование сценариев…</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Phase -->
+    <div class="success-phase">
+      <div class="success-icon">
+        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <path d="M22 4L12 14.01l-3-3"></path>
+        </svg>
+      </div>
+      <h2 class="success-title">Найден оптимальный сценарий</h2>
+      <p class="success-desc">Мы проанализировали ваши данные и подготовили лучшее решение для вас.</p>
+      
+      <a href="4.html" class="btn-primary">Показать результат</a>
+      <a href="1.html" class="btn-cancel">Отмена</a>
+    </div>
+
+  </div>
+</main>
+
+</body>
+</html>

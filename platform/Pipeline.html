@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QaryzSheshim — Воронка урегулирования</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+
+<style>
+:root {
+  --primary: #10B981;
+  --primary-dark: #059669;
+  --primary-light: #D1FAE5;
+  --secondary: #6366F1;
+  --danger: #EF4444;
+  --danger-light: #FEE2E2;
+  --warning: #F59E0B;
+  --warning-light: #FEF3C7;
+  --slate-50: #F8FAFC;
+  --slate-100: #F1F5F9;
+  --slate-200: #E2E8F0;
+  --slate-300: #CBD5E1;
+  --slate-400: #94A3B8;
+  --slate-500: #64748B;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1E293B;
+  --slate-900: #0F172A;
+  --glass: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --shadow-premium: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--slate-50);
+  color: var(--slate-900);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.reveal {
+  animation: fadeInUp 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+/* Background Mesh */
+.bg-mesh {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: 
+    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(245, 158, 11, 0.08) 0px, transparent 50%);
+}
+
+/* Header */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
+  padding: 16px 0;
+  transition: var(--transition);
+}
+
+.header-container {
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 32px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 12px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--slate-600);
+  font-weight: 600;
+  font-size: 14px;
+  transition: var(--transition);
+  padding: 10px 18px;
+  border-radius: 14px;
+}
+
+.nav-links a:hover {
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--slate-900);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+}
+
+.nav-links a.active {
+  color: var(--primary-dark);
+  background: rgba(16, 185, 129, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(16, 185, 129, 0.2);
+}
+
+.header-right {
+  font-size: 13px;
+  color: var(--slate-600);
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 8px 16px;
+  border-radius: 99px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 10px var(--primary);
+  animation: pulse 2s infinite;
+}
+
+/* Kanban Board Container */
+.dashboard-container {
+  max-width: 100%;
+  margin: 110px auto 20px;
+  padding: 0 32px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 130px);
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  flex-shrink: 0;
+}
+
+.page-title {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, var(--slate-900), var(--slate-600));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Custom scrollbar for kanban board */
+.kanban-board::-webkit-scrollbar {
+  height: 8px;
+}
+.kanban-board::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.3);
+  border-radius: 4px;
+}
+.kanban-board::-webkit-scrollbar-thumb {
+  background: var(--slate-300);
+  border-radius: 4px;
+}
+.kanban-board::-webkit-scrollbar-thumb:hover {
+  background: var(--slate-400);
+}
+
+.kanban-board {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 16px;
+  flex-grow: 1;
+  align-items: flex-start;
+}
+
+.kanban-col {
+  min-width: 340px;
+  width: 340px;
+  max-height: 100%;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+.col-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+}
+
+.col-header h4 {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--slate-800);
+}
+
+.col-header .count {
+  background: var(--slate-200);
+  color: var(--slate-700);
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* Custom scrollbar for cards column */
+.kanban-cards::-webkit-scrollbar {
+  width: 6px;
+}
+.kanban-cards::-webkit-scrollbar-track {
+  background: transparent;
+}
+.kanban-cards::-webkit-scrollbar-thumb {
+  background: var(--slate-300);
+  border-radius: 3px;
+}
+.kanban-cards::-webkit-scrollbar-thumb:hover {
+  background: var(--slate-400);
+}
+
+.kanban-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 20px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.kanban-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  transition: var(--transition);
+  cursor: grab;
+  display: flex;
+  flex-direction: column;
+}
+
+.kanban-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(16, 185, 129, 0.3);
+  box-shadow: 0 20px 40px -15px rgba(16, 185, 129, 0.12);
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.client-name {
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--slate-900);
+  letter-spacing: -0.3px;
+}
+
+.client-debt {
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--slate-800);
+  background: linear-gradient(135deg, var(--slate-900), var(--slate-600));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.card-tags {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tag.target { background: var(--primary-light); color: var(--primary-dark); }
+.tag.borderline { background: var(--warning-light); color: #B45309; }
+.tag.reject { background: var(--danger-light); color: #B91C1C; }
+.tag.status { background: var(--slate-100); color: var(--slate-600); border: 1px solid var(--slate-200); }
+
+.card-details {
+  font-size: 13px;
+  color: var(--slate-600);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(255,255,255,0.5);
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.6);
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.detail-label {
+  color: var(--slate-500);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.detail-value {
+  font-weight: 700;
+  color: var(--slate-800);
+  text-align: right;
+  font-size: 12px;
+}
+
+.detail-value.warning { color: #D97706; }
+.detail-value.danger { color: #DC2626; }
+.detail-value.success { color: var(--primary-dark); }
+
+</style>
+</head>
+<body>
+
+<div class="bg-mesh"></div>
+
+<header>
+  <div class="header-container">
+    <div class="header-left">
+      <div class="logo">QaryzSheshim</div>
+      <nav class="nav-links">
+        <a href="Dashboard.html">Dashboard</a>
+        <a href="#" class="active">Воронка</a>
+        <a href="#">Клиенты</a>
+        <a href="#">Сделки</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <span class="status-dot"></span>
+      Обновлено: 28.04.2026, 14:15
+    </div>
+  </div>
+</header>
+
+<main class="dashboard-container">
+  <div class="page-header reveal">
+    <h1 class="page-title">Воронка урегулирования</h1>
+  </div>
+  
+  <div class="kanban-board reveal" style="animation-delay: 0.1s;">
+    <!-- Column: Новая заявка -->
+    <div class="kanban-col">
+      <div class="col-header">
+        <h4>Новая заявка</h4>
+        <span class="count">23</span>
+      </div>
+      <div class="kanban-cards">
+        <div class="kanban-card">
+          <div class="card-head">
+            <div class="client-name">Айдаров С.</div>
+            <div class="client-debt">540 000 ₸</div>
+          </div>
+          <div class="card-tags">
+            <span class="tag status">Новая заявка</span>
+          </div>
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="detail-label">В этапе:</span>
+              <span class="detail-value success">10 минут</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Последнее действие:</span>
+              <span class="detail-value">28.04</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="kanban-card">
+          <div class="card-head">
+            <div class="client-name">Нурбеков Т.</div>
+            <div class="client-debt" style="color: var(--slate-400); font-size: 13px;">Отсутствует</div>
+          </div>
+          <div class="card-tags">
+            <span class="tag status">Данные не заполнены</span>
+          </div>
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="detail-label">В этапе:</span>
+              <span class="detail-value">1 день</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Последнее действие:</span>
+              <span class="detail-value">27.04</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column: Скоринг -->
+    <div class="kanban-col">
+      <div class="col-header">
+        <h4>Скоринг</h4>
+        <span class="count">41</span>
+      </div>
+      <div class="kanban-cards">
+        <div class="kanban-card">
+          <div class="card-head">
+            <div class="client-name">Волков И.</div>
+            <div class="client-debt">1 850 000 ₸</div>
+          </div>
+          <div class="card-tags">
+            <span class="tag status">Анализ КИ</span>
+          </div>
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="detail-label">Вероятность:</span>
+              <span class="detail-value">55%</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">В этапе:</span>
+              <span class="detail-value">2 дня</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Последнее действие:</span>
+              <span class="detail-value">26.04</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column: Квалификация -->
+    <div class="kanban-col">
+      <div class="col-header">
+        <h4>Квалификация</h4>
+        <span class="count">87</span>
+      </div>
+      <div class="kanban-cards">
+        <!-- 8 cards min -->
+        <div class="kanban-card">
+          <div class="card-head">
+            <div class="client-name">Садыкова М.</div>
+            <div class="client-debt">380 000 ₸</div>
+          </div>
+          <div class="card-tags">
+            <span class="tag borderline">Borderline</span>
+            <span class="tag status">Клиент не отвечает</span>
+          </div>
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="detail-label">Вероятность:</span>
+              <span class="detail-value">42% — средняя</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">В этапе:</span>
+              <span class="detail-value danger">5 дней (просрочено)</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Последнее действие:</span>
+              <span class="detail-value">23.04</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="kanban-card">
+          <div class="card-head">
+            <div class="client-name">Оспанов К.</div>
+            <div class="client-debt">1 500 000 ₸</div>
+          </div>
+          <div class="card-tags">
+            <span class="tag target">Target</span>
+            <span class="tag status">Данные подтверждены частично</span>
+          </div>
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="detail-label">Вероятность:</span>
+              <span class="detail-value">60%</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">В этапе:</span>
+              <span class="detail-value">1 день</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Последнее действие:</span>
+              <span class="detail-value">27.04</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="kanban-card">
+          <div class="card-head">
+            <div class="client-name">Алиева Ж.</div>
+            <div class="client-debt">890 000 ₸</div>
+          </div>
+          <div class="card-tags">
+            <span class="tag borderline">Borderline</span>
+            <span class="tag status">Ожидает оферту</span>
+          </div>
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="detail-label">Вероятность:</span>
+              <span class="detail-value">50%</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">В этапе:</span>
+              <span class="detail-value danger">4 дня (просрочено)</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Последнее действие:</span>
+              <span class="detail-value">24.04</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="kanban-card">
+          <div class="card-head">
+            <div class="client-name">Жумабек А.</div>
+            <div class="client-debt">2 100 000 ₸</div>
+          </div>
+          <div class="card-tags">
+            <span class="tag target">Target</span>
+          </div>
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="detail-label">Next Action:</span>
+              <span class="detail-value">Уточнить доходы</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Вероятность:</span>
+              <span class="detail-value">70%</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">В этапе:</span>
+              <span class="detail-value success">2 часа</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Последнее действие:</span>
+              <span class="detail-value">28.04</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="kanban-card">
+          <div class="card-head">
+            <div class="client-name">Тен В.</div>
+            <div class="client-debt">450 000 ₸</div>
+          </div>
+          <div class="card-tags">
+            <span class="tag borderline">Borderline</span>
+            <span class="tag status">Клиент не отвечает</span>
+          </div>
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="detail-label">Вероятность:</span>
+              <span class="detail-value warning">30%</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">В этапе:</span>
+              <span class="detail-value">3 дня</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Последнее действие:</span>
+              <span class="detail-value">25.04</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="kanban-card">
+          <div class="card-head">
+            <div class="client-name">Смагулов Е.</div>
+            <div class="client-debt">3 200 000 ₸</div>
+          </div>
+          <div class="card-tags">
+            <span class="tag target">Target</span>
+          </div>
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="detail-label">Next Action:</span>
+              <span class="detail-value">Звонок в 15:00</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Вероятность:</span>
+              <span class="detail-value success">85%</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">В этапе:</span>
+              <span class="detail-value">1 день</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Последнее действие:</span>
+              <span class="detail-value">27.04</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="kanban-card">
+          <div class="card-head">
+            <div class="client-name">Касымова А.</div>
+            <div class="client-debt">150 000 ₸</div>
+          </div>
+          <div class="card-tags">
+            <span class="tag reject">Reject</span>
+            <span class="tag status">Отказ от условий</span>
+          </div>
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="detail-label">Вероятность:</span>
+              <span class="detail-value danger">10%</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">В этапе:</span>
+              <span class="detail-value">2 дня</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Последнее действие:</span>
+              <span class="detail-value">26.04</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="kanban-card">
+          <div class="card-head">
+            <div class="client-name">Исаев Т.</div>
+            <div class="client-debt">950 000 ₸</div>
+          </div>
+          <div class="card-tags">
+            <span class="tag target">Target</span>
+            <span class="tag status">Проверка КИ</span>
+          </div>
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="detail-label">Вероятность:</span>
+              <span class="detail-value">65%</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">В этапе:</span>
+              <span class="detail-value success">5 часов</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Последнее действие:</span>
+              <span class="detail-value">28.04</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Column: Расчет -->
+    <div class="kanban-col">
+      <div class="col-header">
+        <h4>Расчет</h4>
+        <span class="count">12</span>
+      </div>
+      <div class="kanban-cards">
+        <div class="kanban-card">
+          <div class="card-head">
+            <div class="client-name">Усенов Б.</div>
+            <div class="client-debt">780 000 ₸</div>
+          </div>
+          <div class="card-tags">
+            <span class="tag status">Формирование графика</span>
+          </div>
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="detail-label">Вероятность:</span>
+              <span class="detail-value">80%</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">В этапе:</span>
+              <span class="detail-value">1 день</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column: Предложение -->
+    <div class="kanban-col">
+      <div class="col-header">
+        <h4>Предложение</h4>
+        <span class="count">28</span>
+      </div>
+      <div class="kanban-cards">
+        <div class="kanban-card">
+          <div class="card-head">
+            <div class="client-name">Иванов А.</div>
+            <div class="client-debt">2 450 000 ₸</div>
+          </div>
+          <div class="card-tags">
+            <span class="tag target">Target</span>
+          </div>
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="detail-label">Next Action:</span>
+              <span class="detail-value">Позвонить сегодня</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Вероятность:</span>
+              <span class="detail-value success">78% — высокая</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">В этапе:</span>
+              <span class="detail-value">2 дня</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Последнее действие:</span>
+              <span class="detail-value">26.04</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column: Согласие -->
+    <div class="kanban-col">
+      <div class="col-header">
+        <h4>Согласие</h4>
+        <span class="count">19</span>
+      </div>
+      <div class="kanban-cards">
+        <div class="kanban-card">
+          <div class="card-head">
+            <div class="client-name">Ахметов Д.</div>
+            <div class="client-debt">1 200 000 ₸</div>
+          </div>
+          <div class="card-tags">
+            <span class="tag status">Ожидает документы</span>
+          </div>
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="detail-label">В этапе:</span>
+              <span class="detail-value">3 дня</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Последнее действие:</span>
+              <span class="detail-value">25.04</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column: Исполнение -->
+    <div class="kanban-col">
+      <div class="col-header">
+        <h4>Исполнение</h4>
+        <span class="count">9</span>
+      </div>
+      <div class="kanban-cards">
+        <div class="kanban-card">
+          <div class="card-head">
+            <div class="client-name">Бекмурзаев Н.</div>
+            <div class="client-debt">5 100 000 ₸</div>
+          </div>
+          <div class="card-tags">
+            <span class="tag target">Target</span>
+            <span class="tag status">Подписание договора</span>
+          </div>
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="detail-label">Вероятность:</span>
+              <span class="detail-value success">99%</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">В этапе:</span>
+              <span class="detail-value">1 день</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column: Завершено -->
+    <div class="kanban-col">
+      <div class="col-header">
+        <h4>Завершено</h4>
+        <span class="count">14</span>
+      </div>
+      <div class="kanban-cards">
+        <div class="kanban-card" style="opacity: 0.8;">
+          <div class="card-head">
+            <div class="client-name">Ким Р.</div>
+            <div class="client-debt">120 000 ₸</div>
+          </div>
+          <div class="card-tags">
+            <span class="tag reject">Reject</span>
+            <span class="tag status">Передан партнёру</span>
+          </div>
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="detail-label">Последнее действие:</span>
+              <span class="detail-value">22.04</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  // Simple reveal animation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => {
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>

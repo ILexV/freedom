@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Введите данные - QaryzSheshim</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --primary: #10B981;
+  --primary-dark: #059669;
+  --primary-light: #D1FAE5;
+  --secondary: #6366F1;
+  --slate-50: #F8FAFC;
+  --slate-100: #F1F5F9;
+  --slate-200: #E2E8F0;
+  --slate-400: #94A3B8;
+  --slate-600: #475569;
+  --slate-900: #0F172A;
+  --glass: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --shadow-premium: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--slate-50);
+  color: var(--slate-900);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Background Mesh */
+.bg-mesh {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: 
+    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(245, 158, 11, 0.05) 0px, transparent 50%);
+}
+
+/* Header */
+header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 16px 0;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+}
+
+.nav-container {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+
+.demo-badge {
+  background: var(--slate-100);
+  color: var(--slate-600);
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Main Content */
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 24px 100px;
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header Section */
+.page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--slate-600);
+  text-decoration: none;
+  transition: var(--transition);
+  width: fit-content;
+}
+
+.back-link:hover {
+  color: var(--slate-900);
+}
+
+.back-link svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s;
+}
+
+.back-link:hover svg {
+  transform: translateX(-4px);
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--slate-900);
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+
+/* Form Card */
+.form-card {
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: var(--shadow-premium);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  position: relative;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 32px;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 640px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-card {
+    padding: 24px;
+  }
+  h1 { font-size: 28px; }
+}
+
+/* Form Elements */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--slate-600);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+input {
+  width: 100%;
+  background: var(--slate-50);
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--slate-200);
+  color: var(--slate-900);
+  font-size: 16px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: all 0.2s;
+  outline: none;
+  box-shadow: var(--shadow-sm);
+}
+
+input::placeholder {
+  color: var(--slate-400);
+  font-weight: 400;
+}
+
+input:focus {
+  background: white;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+.input-suffix {
+  position: absolute;
+  right: 16px;
+  font-size: 16px;
+  color: var(--slate-400);
+  font-weight: 600;
+  pointer-events: none;
+}
+
+/* Button */
+.btn-submit-container {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 16px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  padding: 16px 36px;
+  border-radius: 14px;
+  border: none;
+  font-weight: 700;
+  font-size: 16px;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(16, 185, 129, 0.25);
+  transition: var(--transition);
+  min-width: 200px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px rgba(16, 185, 129, 0.35);
+}
+
+@media (max-width: 640px) {
+  .btn-submit-container {
+    justify-content: stretch;
+  }
+  .btn-primary {
+    width: 100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-mesh"></div>
+
+<header>
+  <div class="nav-container">
+    <div class="logo-container">
+      <div class="logo">QaryzSheshim</div>
+      <div class="demo-badge">Demo</div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="page-header">
+    <a href="1.html" class="back-link">
+      <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+      <span>Назад</span>
+    </a>
+    <h1>Введите данные</h1>
+  </div>
+
+  <div class="form-card">
+    <form id="dataForm">
+      <div class="form-grid">
+        <!-- IIN Input -->
+        <div class="input-group">
+          <label>Ваш ИНН</label>
+          <div class="input-wrapper">
+            <input class="digit-only" maxlength="12" minlength="12" pattern="\d*" placeholder="123456789012" required type="text"/>
+          </div>
+        </div>
+
+        <!-- Phone Input -->
+        <div class="input-group">
+          <label>Номер телефона</label>
+          <div class="input-wrapper">
+            <input id="phoneInput" placeholder="+7 (700) 000-00-00" required type="tel"/>
+          </div>
+        </div>
+
+        <!-- Total Debt Input -->
+        <div class="input-group">
+          <label>Общий долг</label>
+          <div class="input-wrapper">
+            <input class="digit-only format-money" placeholder="0" required type="text" value="1 200 000"/>
+            <span class="input-suffix">₸</span>
+          </div>
+        </div>
+
+        <!-- Number of Loans Input -->
+        <div class="input-group">
+          <label>Кредитов</label>
+          <div class="input-wrapper">
+            <input class="digit-only" placeholder="0" required type="text" value="3"/>
+          </div>
+        </div>
+
+        <!-- Income Input -->
+        <div class="input-group">
+          <label>Доход (в месяц)</label>
+          <div class="input-wrapper">
+            <input class="digit-only format-money" placeholder="0" required type="text" value="250 000"/>
+            <span class="input-suffix">₸</span>
+          </div>
+        </div>
+
+        <!-- Expenses Input -->
+        <div class="input-group">
+          <label>Расходы (в месяц)</label>
+          <div class="input-wrapper">
+            <input class="digit-only format-money" placeholder="0" required type="text" value="120 000"/>
+            <span class="input-suffix">₸</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-submit-container">
+        <button class="btn-primary" type="submit">Рассчитать</button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<script>
+  const phoneInput = document.getElementById('phoneInput');
+
+  phoneInput.addEventListener('input', function (e) {
+      let x = e.target.value.replace(/\D/g, '').match(/(\d{1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+      if (!x) return e.target.value = '';
+      if (!x[2] && x[1] !== '7') {
+          e.target.value = '+7';
+          return;
+      }
+      e.target.value = !x[3] ? '+7 (' + (x[2] || '') : '+7 (' + x[2] + ') ' + x[3] + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
+  });
+
+  phoneInput.addEventListener('keydown', function(e) {
+      if(e.key === 'Backspace' && e.target.value.length <= 4) {
+          e.preventDefault();
+      }
+  });
+
+  // Strict digit-only validation for designated inputs
+  const digitOnlyInputs = document.querySelectorAll('.digit-only');
+  digitOnlyInputs.forEach(input => {
+      input.addEventListener('keypress', function(e) {
+          if (!/\d/.test(e.key)) {
+              e.preventDefault();
+          }
+      });
+      input.addEventListener('paste', function(e) {
+          e.preventDefault();
+          let paste = (e.clipboardData || window.clipboardData).getData('text');
+          paste = paste.replace(/\D/g, '');
+          
+          // If it's a formatted money field, format it on paste
+          if (this.classList.contains('format-money')) {
+              paste = paste.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+          }
+          
+          document.execCommand("insertText", false, paste);
+      });
+      input.addEventListener('input', function(e) {
+          let val = this.value.replace(/\D/g, '');
+          if (this.classList.contains('format-money')) {
+                val = val.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+          }
+          this.value = val;
+      });
+  });
+
+  document.getElementById('dataForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const iinInput = document.querySelector('input[placeholder="123456789012"]');
+      const phoneVal = phoneInput.value.replace(/\D/g, '');
+      const allInputs = this.querySelectorAll('input');
+      let allFilled = true;
+
+      allInputs.forEach(input => {
+          if (!input.value.trim()) {
+              allFilled = false;
+          }
+      });
+
+      if (!allFilled) {
+          alert('Пожалуйста, заполните все поля.');
+          return;
+      }
+
+      if (iinInput.value.length !== 12 || !/^\d+$/.test(iinInput.value)) {
+          alert('ИНН должен состоять ровно из 12 цифр.');
+          return;
+      }
+
+      if (phoneVal.length !== 11) {
+          alert('Пожалуйста, введите корректный номер телефона.');
+          return;
+      }
+
+      // Redirect to next step
+      window.location.href = '3.html';
+  });
+</script>
+</body>
+</html>
